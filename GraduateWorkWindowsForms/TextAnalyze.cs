@@ -11,11 +11,10 @@ namespace GraduateWorkWindowsForms
 {
     public class TextAnalyze
     {
+         static Dictionary<string, string> wordAndType = new Dictionary<string, string>();
+         static string textForAnalyze;
 
-        public static string Usage = "";
-
-        // [START analyze_entities_from_string]
-        private static void AnalyzeEntitiesFromText(string text)
+        public Dictionary<string, string> AnalyzeEntitiesFromText(string text)
         {
             var client = LanguageServiceClient.Create();
             var response = client.AnalyzeEntities(new Document()
@@ -23,32 +22,26 @@ namespace GraduateWorkWindowsForms
                 Content = text,
                 Type = Document.Types.Type.PlainText
             });
-            WriteEntities(response.Entities);
+            wordAndType = WriteEntities(response.Entities);
+            return wordAndType;
+
         }
 
         // [START analyze_entities_from_file]
-        private static void WriteEntities(IEnumerable<Entity> entities)
+        private static Dictionary<string, string> WriteEntities(IEnumerable<Entity> entities)
         {
-            Console.WriteLine("Entities:");
             foreach (var entity in entities)
             {
-                Console.WriteLine($"\tName: {entity.Name}");
-                Console.WriteLine($"\tType: {entity.Type}");
-                Console.WriteLine($"\tSalience: {entity.Salience}");
-                Console.WriteLine("\tMentions:");
-                foreach (var mention in entity.Mentions)
-                    Console.WriteLine($"\t\t{mention.Text.BeginOffset}: {mention.Text.Content}");
-                Console.WriteLine("\tMetadata:");
-                foreach (var keyval in entity.Metadata)
+                try
                 {
-                    Console.WriteLine($"\t\t{keyval.Key}: {keyval.Value}");
+                    wordAndType.Add(entity.Name, entity.Type.ToString());
+                }
+                catch (ArgumentException)
+                {
+                    break;
                 }
             }
+            return wordAndType;
         }
-        // [END analyze_entities_from_file]
-        // [END analyze_entities_from_string]
-
-
-
     }
 }

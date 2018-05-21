@@ -13,13 +13,18 @@ namespace GraduateWorkWindowsForms
     public partial class Form1 : Form
     {
 
-        string text = "";
+         string text = "";
 
-        string personType = "man \n people \n stranger \n ropers \n saddlers \n tanners \n bridle";
-        string locationType = "north \n Ropers Gate \n street \n tavern \n Old Narakort Inn";
-        string organisationType = "The Fox";
-        string otherType = "horse \n hubbub";
-        string consumerGoodType = "coat";
+        string personType = "";
+        string locationType = "";
+        string organisationType = "";
+        string otherType = "";
+        string consumerGoodType = "";
+        string workOfArt = "";
+        string type;
+
+        TextAnalyze textAnalyze = new TextAnalyze();
+         static Dictionary<string, string> forAnalyze = new Dictionary<string, string>();
 
         public Form1()
         {
@@ -159,10 +164,28 @@ namespace GraduateWorkWindowsForms
             //OrganisationListView.Items.AddRange(organisationType);
             //OtherListView.Items.AddRange(otherType);
             //ConsumerGoodListView.Items.AddRange(consumerGoodType);
+            
 
             text = FullText.Text;
+            forAnalyze = textAnalyze.AnalyzeEntitiesFromText(text);
 
-
+            foreach (KeyValuePair<string, string> kvp in forAnalyze)
+            {
+                type = kvp.Value;
+                if (kvp.Value == "Other")
+                    otherType = otherType + kvp.Key + "\n";
+                if (kvp.Value == "Person")
+                    personType = personType + kvp.Key + "\n";
+                if (kvp.Value == "WorkOfArt")
+                    workOfArt = workOfArt + kvp.Key + "\n";
+                if (kvp.Value == "Location")
+                    locationType = locationType + kvp.Key + "\n";
+                if (kvp.Value == "ConsumerGood")
+                    consumerGoodType = consumerGoodType + kvp.Key + "\n";
+                if (kvp.Value == "Organisation")
+                    organisationType = organisationType + kvp.Key + "\n";
+               
+            }
 
 
 
