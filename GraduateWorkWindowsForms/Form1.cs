@@ -15,6 +15,7 @@ namespace GraduateWorkWindowsForms
 
          string text = "";
 
+
         string personType = "";
         string locationType = "";
         string organisationType = "";
